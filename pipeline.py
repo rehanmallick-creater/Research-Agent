@@ -1,4 +1,18 @@
+import time
+
 from agent import build_reader_agent, build_search_agent, write_chain, critic_chain
+
+
+def invoke_with_retry(call, tries=3):
+    """Run call(). If the model makes a bad tool call, wait 2 seconds and try again."""
+    for attempt in range(tries):
+        try:
+            return call()
+        except Exception as error:
+            if attempt == tries - 1:
+                raise  # out of tries: show the real error
+            print(f"Attempt {attempt + 1} failed ({error}). Retrying...")
+            time.sleep(2)
 
 
 def run_research_pipeline(topic: str, on_event=None) -> dict:
@@ -21,9 +35,9 @@ def run_research_pipeline(topic: str, on_event=None) -> dict:
     emit("step", {"step": 1, "status": "running", "label": "Search agent is working"})
 
     search_agent = build_search_agent()
-    search_result = search_agent.invoke({
+    search_result = invoke_with_retry(lambda: search_agent.invoke({
         "messages": [("user", f"Find recent, reliable and detailed information about: {topic}")]
-    })
+    }))
     state["search_results"] = search_result["messages"][-1].content
     print("\n search result ", state["search_results"])
     emit("step", {"step": 1, "status": "done", "output": str(state["search_results"])})
@@ -35,14 +49,14 @@ def run_research_pipeline(topic: str, on_event=None) -> dict:
     emit("step", {"step": 2, "status": "running", "label": "Reader agent is scraping top resources"})
 
     reader_agent = build_reader_agent()
-    reader_result = reader_agent.invoke({
+    reader_result = invoke_with_retry(lambda: reader_agent.invoke({
         "messages": [(
             "user",
             f"Based on the following search results about '{topic}', "
             f"pick the most relevant URL and scrape it for deeper content.\n\n"
             f"Search Results:\n{str(state['search_results'])[:800]}"
         )]
-    })
+    }))
     state["scraped_content"] = reader_result["messages"][-1].content
     print("\nscraped content: \n", state["scraped_content"])
     emit("step", {"step": 2, "status": "done", "output": str(state["scraped_content"])})
