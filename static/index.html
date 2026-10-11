@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research Agents</title>
+
+  <link rel="stylesheet" href="/static/style.css">
+
+  <!-- Two small libraries: one turns markdown into HTML, one makes that HTML safe -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+</head>
+<body>
+
+  <!-- Soft glowing blobs in the background (pure decoration) -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <main class="container">
+
+    <!-- ===== Header ===== -->
+    <header>
+      <span class="badge">✨ Multi-Agent AI</span>
+      <h1>Research <span class="gradient-text">Agents</span></h1>
+      <p class="subtitle">
+        Type any topic. Four AI agents will search, read, write and review a report for you.
+      </p>
+    </header>
+
+    <!-- ===== Search box ===== -->
+    <form id="search-form" class="search-box">
+      <input id="topic-input" type="text" placeholder="What do you want to research?" required minlength="3">
+      <button id="search-button" type="submit">Research</button>
+    </form>
+
+    <!-- Click an example to fill the box -->
+    <div class="examples">
+      <button type="button" class="chip">Future of solid-state batteries</button>
+      <button type="button" class="chip">How does CRISPR gene editing work</button>
+      <button type="button" class="chip">AI agents in healthcare</button>
+    </div>
+
+    <!-- ===== The 4 agent cards (hidden until you start) ===== -->
+    <section id="agents" class="agents hidden">
+
+      <div class="agent" id="agent-1">
+        <div class="agent-icon">🔍</div>
+        <h3>Search Agent</h3>
+        <p class="agent-status">Waiting</p>
+      </div>
+
+      <div class="agent" id="agent-2">
+        <div class="agent-icon">📖</div>
+        <h3>Reader Agent</h3>
+        <p class="agent-status">Waiting</p>
+      </div>
+
+      <div class="agent" id="agent-3">
+        <div class="agent-icon">✍️</div>
+        <h3>Writer</h3>
+        <p class="agent-status">Waiting</p>
+      </div>
+
+      <div class="agent" id="agent-4">
+        <div class="agent-icon">🧐</div>
+        <h3>Critic</h3>
+        <p class="agent-status">Waiting</p>
+      </div>
+
+    </section>
+
+    <!-- ===== Error message ===== -->
+    <div id="error-box" class="error-box hidden"></div>
+
+    <!-- ===== Results (hidden until the report is ready) ===== -->
+    <section id="results" class="results hidden">
+
+      <div class="tabs">
+        <button class="tab active" data-tab="report">📄 Report</button>
+        <button class="tab" data-tab="feedback">🧐 Critic Feedback</button>
+        <button class="tab" data-tab="search">🔍 Search Results</button>
+        <button class="tab" data-tab="scraped">📖 Scraped Content</button>
+      </div>
+
+      <div class="result-card">
+        <div id="result-content"></div>
+      </div>
+
+      <div class="actions">
+        <button id="copy-button" class="small-button">Copy</button>
+        <button id="download-button" class="small-button">Download .md</button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>

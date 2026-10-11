@@ -1,0 +1,298 @@
+/* =========================================================
+   style.css - all the looks of the page
+   Sections: 1. Colors  2. Page  3. Header  4. Search box
+             5. Agent cards  6. Results  7. Phone screens
+   ========================================================= */
+
+
+/* ---------- 1. Colors (change these to re-theme everything) ---------- */
+:root {
+  --background: #0a0b14;
+  --card: rgba(255, 255, 255, 0.05);
+  --border: rgba(255, 255, 255, 0.1);
+  --text: #f1f3f9;
+  --muted: #9aa1b5;
+  --purple: #8b5cf6;
+  --blue: #38bdf8;
+  --green: #34d399;
+  --red: #f87171;
+}
+
+
+/* ---------- 2. Page ---------- */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text);
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+.container {
+  position: relative;          /* sits above the glowing blobs */
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 60px 20px 100px;
+}
+
+.hidden {
+  display: none;               /* JavaScript adds/removes this class to show/hide things */
+}
+
+/* Glowing blobs behind everything */
+.blob {
+  position: fixed;
+  width: 450px;
+  height: 450px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.35;
+  z-index: 0;
+}
+.blob-1 { background: var(--purple); top: -150px; left: -100px; }
+.blob-2 { background: var(--blue);   bottom: -150px; right: -100px; }
+
+
+/* ---------- 3. Header ---------- */
+header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+h1 {
+  font-size: 3.2rem;
+  margin: 18px 0 10px;
+}
+
+/* Text filled with a purple-to-blue gradient */
+.gradient-text {
+  background: linear-gradient(90deg, var(--purple), var(--blue));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 1.1rem;
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+
+/* ---------- 4. Search box ---------- */
+.search-box {
+  display: flex;
+  gap: 10px;
+  padding: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+}
+
+.search-box input {
+  flex: 1;
+  padding: 14px 16px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-size: 1.05rem;
+}
+
+.search-box button {
+  padding: 0 28px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.search-box button:hover   { transform: scale(1.04); }
+.search-box button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* Example topic buttons */
+.examples {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.chip {
+  padding: 8px 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.chip:hover {
+  color: var(--text);
+  border-color: var(--purple);
+}
+
+
+/* ---------- 5. Agent cards ---------- */
+.agents {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);   /* 4 equal columns */
+  gap: 14px;
+  margin-top: 40px;
+}
+
+.agent {
+  padding: 20px 14px;
+  text-align: center;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition: 0.3s;
+}
+
+.agent-icon {
+  font-size: 2rem;
+}
+
+.agent h3 {
+  margin: 10px 0 6px;
+  font-size: 1rem;
+}
+
+.agent-status {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* While an agent is working: purple glow + gentle pulse */
+.agent.working {
+  border-color: var(--purple);
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.4);
+  animation: pulse 1.2s infinite;
+}
+.agent.working .agent-status {
+  color: var(--purple);
+}
+
+/* When an agent has finished: green */
+.agent.done {
+  border-color: var(--green);
+}
+.agent.done .agent-status {
+  color: var(--green);
+}
+
+@keyframes pulse {
+  50% { transform: scale(1.04); }
+}
+
+
+/* ---------- 6. Results ---------- */
+.error-box {
+  margin-top: 24px;
+  padding: 16px;
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid var(--red);
+  border-radius: 12px;
+  color: var(--red);
+}
+
+.results {
+  margin-top: 40px;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tab {
+  padding: 10px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: 0.2s;
+}
+.tab:hover { color: var(--text); }
+.tab.active {
+  color: white;
+  background: var(--purple);
+  border-color: var(--purple);
+}
+
+.result-card {
+  margin-top: 16px;
+  padding: 28px 32px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  line-height: 1.75;
+}
+
+/* Styling for the report text (headings, links, lists...) */
+.result-card h1,
+.result-card h2,
+.result-card h3 { margin-top: 1.4em; }
+.result-card h1:first-child,
+.result-card h2:first-child { margin-top: 0; }
+.result-card a { color: var(--blue); }
+.result-card code {
+  padding: 2px 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+}
+.result-card pre { white-space: pre-wrap; word-break: break-word; }
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.small-button {
+  padding: 8px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  cursor: pointer;
+}
+.small-button:hover { border-color: var(--purple); }
+
+
+/* ---------- 7. Phone screens ---------- */
+@media (max-width: 700px) {
+  h1 { font-size: 2.3rem; }
+  .agents { grid-template-columns: repeat(2, 1fr); }   /* 2 columns instead of 4 */
+  .search-box { flex-direction: column; }
+  .search-box button { padding: 14px; }
+  .result-card { padding: 20px; }
+}
